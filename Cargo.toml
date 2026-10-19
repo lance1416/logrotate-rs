@@ -1,0 +1,20 @@
+[package]
+name = "logrotate-rs"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99"
+description = "A Rust reimplementation of the logrotate utility"
+license = "GPL-2.0-or-later"
+publish = false
+
+[dependencies]
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = "warn"
+
+[profile.release]
+lto = "thin"
+strip = "debuginfo"

@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+
+LC_ALL=C awk '
+    NR == 1 {
+        if ($0 !~ /^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-zA-Z0-9._\/-]+\))?!?: [^[:space:]].*$/) {
+            invalid = 1
+        }
+    }
+    NR > 1 && NF { invalid = 1 }
+    END {
+        if (NR == 0 || invalid) {
+            print "Use an English Conventional Commit subject only; no body or trailers." > "/dev/stderr"
+            print "Example: chore: bootstrap Rust project" > "/dev/stderr"
+            exit 1
+        }
+    }
+' "$1"
