@@ -21,6 +21,20 @@ the `.tarball-version` file supplies its `git describe` version to Autoconf in
 the export. Upstream C sources are unchanged. Docker's build log records the
 actual package downloads, bootstrap, configure, and compiler invocations.
 
+Preparation resolves the script's symlinks, the upstream checkout root, and the
+target's existing parent physically before creating anything. The target must
+be new and outside both checkouts. With Python 3 available, run its boundary
+regressions without Docker:
+
+```sh
+python3 tests/reference/test_prepare.py --upstream /path/to/upstream
+```
+
+The tests copy the public helpers into a temporary stand-in main checkout and
+clone the local upstream with shared read-only objects. All exports and symlinks
+stay in temporary fixtures; the supplied checkout is only read. Use
+`--keep-fixtures` to retain the fixtures and Git invocation traces for inspection.
+
 ```sh
 context="$(mktemp -d /tmp/logrotate-reference.XXXXXX)/build"
 ./scripts/reference/prepare.sh /path/to/upstream "$context"
